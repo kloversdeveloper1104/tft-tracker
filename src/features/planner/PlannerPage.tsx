@@ -15,6 +15,7 @@ import { HexBoard, HexGhost, type DragData } from "./HexBoard";
 import { UnitActionBar } from "./UnitActionBar";
 import { ChampionPool } from "./ChampionPool";
 import { TraitsPanel } from "./TraitsPanel";
+import { RecommendCard } from "./RecommendCard";
 import { MAX_ITEMS, MAX_LEVEL, copyText, decodeShare, encodeShare, firstEmptyHex, nextStars, placeShareUnits } from "./logic";
 
 export function PlannerPage() {
@@ -274,6 +275,12 @@ export function PlannerPage() {
               traits={data.traits}
               onAddEmblem={(id) => mutate((c) => ({ ...c, emblems: [...c.emblems, id] }))}
               onRemoveEmblem={(i) => mutate((c) => ({ ...c, emblems: c.emblems.filter((_, j) => j !== i) }))}
+            />
+
+            <RecommendCard
+              comp={comp}
+              setNumber={data.setNumber}
+              onLoad={(units, name) => { mutate((c) => ({ ...c, units, name: c.name || name })); setSelectedHex(null); }}
             />
           </div>
 

@@ -5,6 +5,7 @@ import { COST_COLORS, TRAIT_STYLE_COLORS } from "@/data/odds";
 import { useStaticData } from "@/stores/staticData";
 import { Tooltip } from "@/components/ui";
 import type { Augment, Champion, Item, Trait } from "@/lib/types";
+import { TIER_COLORS, TIER_ORDER, type Tier } from "@/lib/augmentTiers";
 
 // ----- Rich description -------------------------------------------------------
 export function RichDesc({ desc, vars, rows, className }: {
@@ -310,4 +311,59 @@ export function ImageWithFallback({ src, alt, className }: { src: string; alt?: 
   const [err, setErr] = useState(false);
   if (err) return <div className={cn("bg-surface-3", className)} />;
   return <img src={src} alt={alt ?? ""} className={className} onError={() => setErr(true)} draggable={false} />;
+}
+
+// ----- User augment tier (S/A/B/C/D) -------------------------------------------------------
+export function TierBadge({ tier, size = "sm", showEmpty = false, className }: {
+  tier: Tier | null | undefined; size?: "xs" | "sm"; showEmpty?: boolean; className?: string;
+}) {
+  const s = size === "xs" ? "h-4 min-w-4 px-1 text-[10px]" : "h-5 min-w-5 px-1.5 text-[11px]";
+  if (!tier) {
+    if (!showEmpty) return null;
+    return <span className={cn("inline-flex items-center justify-center rounded font-medium text-fg-subtle bg-white/5 border border-white/10", s, className)}>未評価</span>;
+  }
+  const color = TIER_COLORS[tier];
+  return (
+    <span
+      className={cn("inline-flex items-center justify-center rounded font-bold tabular-nums leading-none", s, className)}
+      style={{ color, background: `color-mix(in srgb, ${color} 16%, transparent)`, border: `1px solid color-mix(in srgb, ${color} 45%, transparent)`, textShadow: `0 0 8px color-mix(in srgb, ${color} 60%, transparent)` }}
+      title={`${tier} ティア`}
+    >
+      {tier}
+    </span>
+  );
+}
+
+/** Compact 5-segment S/A/B/C/D toggle. Clicking the active tier clears it. */
+export function TierPicker({ value, onChange, size = "sm", className, stopPropagation = true }: {
+  value: Tier | null | undefined; onChange: (t: Tier | null) => void; size?: "xs" | "sm"; className?: string; stopPropagation?: boolean;
+}) {
+  const seg = size === "xs" ? "h-5 w-5 text-[10px]" : "h-6 w-6 text-[11px]";
+  return (
+    <div
+      role="radiogroup"
+      aria-label="ティア"
+      className={cn("no-drag inline-flex items-center rounded-md border border-white/10 bg-black/25 p-0.5 gap-0.5 shrink-0", className)}
+      onClick={stopPropagation ? (e) => e.stopPropagation() : undefined}
+    >
+      {TIER_ORDER.map((t) => {
+        const active = value === t;
+        const color = TIER_COLORS[t];
+        return (
+          <button
+            key={t}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            title={active ? `${t} ティア（クリックで解除）` : `${t} ティアに設定`}
+            onClick={() => onChange(active ? null : t)}
+            className={cn("rounded font-bold tabular-nums leading-none transition-all duration-100 focus-ring", seg, !active && "text-fg-subtle hover:text-fg hover:bg-white/10")}
+            style={active ? { color: "#0b0f1a", background: color, boxShadow: `0 0 10px -2px ${color}` } : { color: `color-mix(in srgb, ${color} 55%, var(--color-fg-subtle))` }}
+          >
+            {t}
+          </button>
+        );
+      })}
+    </div>
+  );
 }

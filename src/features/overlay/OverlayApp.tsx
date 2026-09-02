@@ -1,19 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { emit } from "@tauri-apps/api/event";
-import { X, MousePointer2, SunMedium, LayoutGrid, Hammer, Dices, NotebookPen, Layers } from "lucide-react";
+import { X, MousePointer2, SunMedium, LayoutGrid, Hammer, Dices, NotebookPen, Layers, Gem } from "lucide-react";
 import { overlay } from "@/lib/api";
 import { useSettings } from "@/stores/settings";
 import { cn } from "@/lib/utils";
 import { useOverlaySettings } from "./useOverlaySettings";
 import { CompTab } from "./CompTab";
+import { AugmentsTab } from "./AugmentsTab";
 import { ItemsTab } from "./ItemsTab";
 import { OddsTab } from "./OddsTab";
 import { NotesTab } from "./NotesTab";
 import { OBtn } from "./ui";
 
-type Tab = "comp" | "items" | "odds" | "notes";
+type Tab = "comp" | "augments" | "items" | "odds" | "notes";
 const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
   { id: "comp", label: "構成", icon: <LayoutGrid className="size-3.5" /> },
+  { id: "augments", label: "オーグメント", icon: <Gem className="size-3.5" /> },
   { id: "items", label: "アイテム", icon: <Hammer className="size-3.5" /> },
   { id: "odds", label: "確率", icon: <Dices className="size-3.5" /> },
   { id: "notes", label: "メモ", icon: <NotebookPen className="size-3.5" /> },
@@ -159,6 +161,7 @@ export function OverlayApp() {
             ) : (
               <>
                 {tab === "comp" && <CompTab />}
+                {tab === "augments" && <AugmentsTab />}
                 {tab === "items" && <ItemsTab />}
                 {tab === "odds" && <OddsTab />}
                 {tab === "notes" && <NotesTab />}

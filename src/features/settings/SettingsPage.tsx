@@ -7,6 +7,7 @@ import { OverlaySection } from "./OverlaySection";
 import { OddsSection } from "./OddsSection";
 import { DisplaySection } from "./DisplaySection";
 import { DataSection } from "./DataSection";
+import { TierSection } from "./TierSection";
 import { AboutSection } from "./AboutSection";
 
 export function SettingsPage() {
@@ -24,6 +25,7 @@ export function SettingsPage() {
           <OverlaySection />
           <OddsSection />
           <DisplaySection />
+          <TierSection />
           <DataSection />
           <AboutSection />
         </div>

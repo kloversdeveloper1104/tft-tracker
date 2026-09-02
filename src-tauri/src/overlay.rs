@@ -85,9 +85,14 @@ pub fn is_open(app: &AppHandle) -> bool {
 
 pub fn open(app: &AppHandle) -> AppResult<()> {
     if let Some(w) = app.get_webview_window(OVERLAY_LABEL) {
-        w.show()?;
-        w.set_focus()?;
-        return Ok(());
+        // A window that is being destroyed can still be registered for a moment; only reuse it
+        // when it actually becomes visible, otherwise fall through and create a fresh one.
+        if w.show().is_ok() && w.is_visible().unwrap_or(false) {
+            let _ = w.set_focus();
+            return Ok(());
+        }
+        let _ = w.destroy();
+        std::thread::sleep(Duration::from_millis(150));
     }
 
     let db = app.state::<Arc<Db>>().inner().clone();

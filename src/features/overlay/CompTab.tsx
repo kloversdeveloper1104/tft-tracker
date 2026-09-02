@@ -9,6 +9,7 @@ import { TRAIT_STYLE_COLORS } from "@/data/odds";
 import { cn } from "@/lib/utils";
 import type { PlannerComp } from "@/lib/types";
 import { OEmpty, OSection } from "./ui";
+import { RecommendPanel } from "./RecommendPanel";
 
 const plannerStore = new LazyStore("planner.json");
 
@@ -56,6 +57,14 @@ export function CompTab() {
     const toArr = (m: Map<string, number>) => [...m.entries()].map(([id, count]) => ({ id, count })).sort((a, b) => b.count - a.count);
     return { completed: toArr(completed), components: toArr(components) };
   }, [comp, s.itemsById]);
+
+  // Units treated as "owned" by the recommender: the ticked checklist units when any are ticked,
+  // otherwise every unit of the active comp.
+  const ownedIds = useMemo(() => {
+    const ticked = units.filter((_, i) => acquired[`${comp?.id}:${i}`]).map((u) => u.championId);
+    return ticked.length ? ticked : units.map((u) => u.championId);
+  }, [units, acquired, comp?.id]);
+  const activeTraitIds = useMemo(() => traits.filter((t) => t.style > 0).map((t) => t.trait.apiName), [traits]);
 
   if (loading) {
     return <div className="flex flex-col gap-2 p-3">{[0, 1, 2, 3].map((i) => <div key={i} className="skeleton h-9" />)}</div>;
@@ -125,6 +134,8 @@ export function CompTab() {
           })}
         </ul>
       </OSection>
+
+      <RecommendPanel ownedIds={ownedIds} traitApiNames={activeTraitIds} setNumber={comp.setNumber} />
 
       {itemGoals.completed.length > 0 && (
         <OSection title="アイテム目標">
