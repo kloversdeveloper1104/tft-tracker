@@ -1,0 +1,211 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/noto-sans-jp";
+
+@theme {
+  --font-sans: "Inter Variable", "Noto Sans JP Variable", "Segoe UI", "Yu Gothic UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+
+  /* Surfaces */
+  --color-bg: #0b0f1a;
+  --color-bg-elev: #111726;
+  --color-surface: #161d2f;
+  --color-surface-2: #1c2438;
+  --color-surface-3: #232d45;
+  --color-border: #263049;
+  --color-border-strong: #34405e;
+
+  /* Text */
+  --color-fg: #e7ebf5;
+  --color-fg-muted: #9aa5bf;
+  --color-fg-subtle: #6c7793;
+
+  /* Brand */
+  --color-gold: #e8b84a;
+  --color-gold-bright: #ffe08a;
+  --color-gold-dim: #a8791c;
+  --color-teal: #5ee7d6;
+  --color-teal-dim: #1f8f86;
+  --color-accent: #7c9cff;
+  --color-accent-dim: #4c67c9;
+
+  /* Semantic */
+  --color-success: #4ade80;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
+  --color-info: #60a5fa;
+
+  /* TFT cost colors */
+  --color-cost-1: #8f9bb3;
+  --color-cost-2: #3fbf6f;
+  --color-cost-3: #3d8bff;
+  --color-cost-4: #c15bff;
+  --color-cost-5: #ffb63a;
+  --color-cost-6: #ff6b6b;
+
+  /* Trait styles */
+  --color-trait-bronze: #b87333;
+  --color-trait-silver: #b8c4d6;
+  --color-trait-gold: #f0c250;
+  --color-trait-prismatic: #a8f5ff;
+  --color-trait-unique: #ff9b5e;
+
+  /* Placement */
+  --color-place-1: #f7c948;
+  --color-place-2: #c7d2e3;
+  --color-place-3: #d19a66;
+  --color-place-4: #7ea2ff;
+  --color-place-bot: #6b7280;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+  --shadow-pop: 0 12px 40px -8px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --shadow-glow-gold: 0 0 0 1px rgba(232, 184, 74, 0.35), 0 0 24px -4px rgba(232, 184, 74, 0.45);
+
+  --animate-fade-in: fade-in 0.25s ease-out both;
+  --animate-slide-up: slide-up 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-pop: pop 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  --animate-pulse-soft: pulse-soft 2s ease-in-out infinite;
+}
+
+@keyframes fade-in { from { opacity: 0 } to { opacity: 1 } }
+@keyframes slide-up { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: translateY(0) } }
+@keyframes pop { from { opacity: 0; transform: scale(0.96) } to { opacity: 1; transform: scale(1) } }
+@keyframes shimmer { from { background-position: -200% 0 } to { background-position: 200% 0 } }
+@keyframes pulse-soft { 0%, 100% { opacity: 1 } 50% { opacity: 0.55 } }
+
+:root {
+  color-scheme: dark;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  user-select: none;
+}
+
+body.overlay-body {
+  background: transparent;
+}
+
+::selection { background: rgba(124, 156, 255, 0.35); }
+
+/* Scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover { background-color: #46547a; }
+
+img { -webkit-user-drag: none; }
+
+a { color: var(--color-accent); }
+
+@utility glass {
+  background: color-mix(in srgb, var(--color-surface) 78%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid color-mix(in srgb, var(--color-border) 80%, transparent);
+}
+
+@utility card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+@utility text-gradient-gold {
+  background: linear-gradient(120deg, var(--color-gold-bright), var(--color-gold), var(--color-gold-dim));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility skeleton {
+  background: linear-gradient(90deg, var(--color-surface-2) 25%, var(--color-surface-3) 50%, var(--color-surface-2) 75%);
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+  border-radius: var(--radius-sm);
+}
+
+@utility drag-region {
+  -webkit-app-region: drag;
+}
+@utility no-drag {
+  -webkit-app-region: no-drag;
+}
+
+@utility focus-ring {
+  outline: none;
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent);
+  }
+}
+
+@utility hex-clip {
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+
+/* Rich text from CDragon descriptions */
+.rich-desc { color: var(--color-fg-muted); user-select: text; }
+.rich-desc br { display: block; content: ""; margin-top: 0.35em; }
+.rich-desc magicDamage, .rich-desc magicdamage { color: #a78bfa; font-weight: 600; }
+.rich-desc physicalDamage, .rich-desc physicaldamage { color: #fb923c; font-weight: 600; }
+.rich-desc trueDamage, .rich-desc truedamage { color: #f8fafc; font-weight: 600; }
+.rich-desc scaleHealth, .rich-desc scalehealth, .rich-desc TFTBonus, .rich-desc tftbonus { color: #4ade80; font-weight: 600; }
+.rich-desc scaleAD, .rich-desc scalead { color: #fb923c; font-weight: 600; }
+.rich-desc scaleAP, .rich-desc scaleap { color: #a78bfa; font-weight: 600; }
+.rich-desc scaleAS, .rich-desc scaleas { color: #fde047; font-weight: 600; }
+.rich-desc scaleArmor, .rich-desc scalearmor, .rich-desc scaleMR, .rich-desc scalemr { color: #93c5fd; font-weight: 600; }
+.rich-desc scaleMana, .rich-desc scalemana { color: #60a5fa; font-weight: 600; }
+.rich-desc TFTKeyword, .rich-desc tftkeyword, .rich-desc keyword { color: var(--color-gold); font-weight: 600; }
+.rich-desc TFTTrackerLabel, .rich-desc tfttrackerlabel { color: var(--color-teal); }
+.rich-desc rules { display: block; color: var(--color-fg-subtle); font-size: 0.92em; margin-top: 0.35em; }
+.rich-desc expandRow, .rich-desc expandrow { display: block; }
+.rich-desc row { display: block; }
+.rich-desc spellActive, .rich-desc spellactive { color: var(--color-gold); font-weight: 600; }
+.rich-desc spellPassive, .rich-desc spellpassive { color: var(--color-teal); font-weight: 600; }
+
+/* Reduced motion (settings toggle) */
+html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+.rich-desc .ico {
+  display: inline-block;
+  padding: 0 4px;
+  margin: 0 1px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-teal);
+  background: color-mix(in srgb, var(--color-teal) 12%, transparent);
+  vertical-align: baseline;
+}
+.rich-desc .unresolved { color: var(--color-fg-subtle); }
